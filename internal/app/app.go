@@ -1,50 +1,21 @@
 package app
 
 import (
-	"log"
-	"slices"
-
 	"github.com/AnisimovMoscow/news-bot/internal/config"
-	"github.com/AnisimovMoscow/news-bot/internal/pkg/sports"
-)
-
-const (
-	allNewsLimit = 50
-	topNewsLimit = 15
+	"github.com/AnisimovMoscow/news-bot/internal/repository/news"
+	"github.com/jmoiron/sqlx"
 )
 
 type App struct {
 	config *config.Config
+	news   *news.Repository
 }
 
-func New(cfg *config.Config) *App {
+func New(cfg *config.Config, db *sqlx.DB) *App {
+	repo := news.New(db)
+
 	return &App{
 		config: cfg,
-	}
-}
-
-func (a *App) Run() {
-	// получаем все последние
-	news, err := sports.LastNews(a.config.TagID, allNewsLimit)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	// сортируем
-	slices.SortFunc(news, func(a, b sports.News) int {
-		return b.CommentsCount - a.CommentsCount
-	})
-
-	// обрезаем топ
-	news = news[:topNewsLimit]
-
-	// сортируем топ
-	slices.SortFunc(news, func(a, b sports.News) int {
-		return b.PublishedAt.Compare(a.PublishedAt)
-	})
-
-	for _, n := range news {
-		log.Println(n)
+		news:   repo,
 	}
 }

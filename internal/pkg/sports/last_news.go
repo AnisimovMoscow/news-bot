@@ -10,6 +10,7 @@ const lastNewsQuery = `
 		newsQueries {
 			newsByTags(IDs: [$id], amount: $limit, filter: ALL, noAds: true, source: ALL) {
 				news {
+					id
 					title
 					commentsCount
 					publishedAt
@@ -20,6 +21,7 @@ const lastNewsQuery = `
 `
 
 type News struct {
+	ID            string    `json:"id"`
 	Title         string    `json:"title"`
 	CommentsCount int       `json:"commentsCount"`
 	PublishedAt   time.Time `json:"publishedAt"`

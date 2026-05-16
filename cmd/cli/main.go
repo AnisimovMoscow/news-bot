@@ -5,6 +5,7 @@ import (
 
 	"github.com/AnisimovMoscow/news-bot/internal/app"
 	"github.com/AnisimovMoscow/news-bot/internal/config"
+	"github.com/AnisimovMoscow/news-bot/internal/database"
 )
 
 func main() {
@@ -12,7 +13,13 @@ func main() {
 
 	cfg := config.New()
 
-	app := app.New(cfg)
+	db, err := database.NewDB(cfg.DB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	app := app.New(cfg, db)
 	app.Run()
 
 	log.Println("Done")
