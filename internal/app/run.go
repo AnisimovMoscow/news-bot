@@ -32,6 +32,7 @@ func (a *App) Run() {
 	})
 
 	// проверяем новые
+	var count int
 	for _, n := range news {
 		id, err := strconv.Atoi(n.ID)
 		if err != nil {
@@ -45,8 +46,6 @@ func (a *App) Run() {
 		}
 
 		if old == nil {
-			log.Println("new", n.Title)
-
 			// отправляем в канал
 			err = a.telegram.Send(getHTML(n))
 			if err != nil {
@@ -61,10 +60,11 @@ func (a *App) Run() {
 				continue
 			}
 
-		} else {
-			log.Println("old", n.Title)
+			count++
 		}
 	}
+
+	log.Printf("total: %d, new:%d\n", len(news), count)
 }
 
 func getHTML(news sports.News) string {

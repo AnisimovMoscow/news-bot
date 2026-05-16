@@ -21,6 +21,7 @@ type NewsLimit struct {
 type Telegram struct {
 	Token   string
 	Channel int64
+	Proxy   string
 }
 
 func New() *Config {
@@ -58,6 +59,7 @@ func New() *Config {
 		Telegram: Telegram{
 			Token:   os.Getenv("TELEGRAM_TOKEN"),
 			Channel: channelID,
+			Proxy:   os.Getenv("TELEGRAM_PROXY"),
 		},
 		DB: os.Getenv("DB"),
 	}
