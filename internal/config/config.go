@@ -20,7 +20,7 @@ type NewsLimit struct {
 }
 type Telegram struct {
 	Token   string
-	Channel int
+	Channel int64
 }
 
 func New() *Config {
@@ -44,6 +44,11 @@ func New() *Config {
 		log.Fatal(err.Error())
 	}
 
+	channelID, err := strconv.ParseInt(os.Getenv("TELEGRAM_CHANNEL_ID"), 10, 64)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
 	return &Config{
 		TagID: tagID,
 		NewsLimit: NewsLimit{
@@ -51,7 +56,8 @@ func New() *Config {
 			Top: topNewsLimit,
 		},
 		Telegram: Telegram{
-			Token: os.Getenv("TELEGRAM_TOKEN"),
+			Token:   os.Getenv("TELEGRAM_TOKEN"),
+			Channel: channelID,
 		},
 		DB: os.Getenv("DB"),
 	}

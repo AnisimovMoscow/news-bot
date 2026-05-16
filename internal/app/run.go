@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"log"
 	"slices"
 	"strconv"
@@ -45,6 +46,15 @@ func (a *App) Run() {
 
 		if old == nil {
 			log.Println("new", n.Title)
+
+			// отправляем в канал
+			err = a.telegram.Send(getHTML(n))
+			if err != nil {
+				log.Println("error", err.Error())
+				continue
+			}
+
+			// сохраняем отправленное
 			err = a.news.Create(model.News{ID: id})
 			if err != nil {
 				log.Println("error", err.Error())
@@ -55,4 +65,8 @@ func (a *App) Run() {
 			log.Println("old", n.Title)
 		}
 	}
+}
+
+func getHTML(news sports.News) string {
+	return fmt.Sprintf("%s\n\n<a href=\"%s\">Читать</a>", news.Title, news.URL)
 }

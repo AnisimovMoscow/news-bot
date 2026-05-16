@@ -14,6 +14,7 @@ const lastNewsQuery = `
 					title
 					commentsCount
 					publishedAt
+					url
 				}
 			}
 		}
@@ -25,6 +26,7 @@ type News struct {
 	Title         string    `json:"title"`
 	CommentsCount int       `json:"commentsCount"`
 	PublishedAt   time.Time `json:"publishedAt"`
+	URL           string    `json:"url"`
 }
 
 func LastNews(tagID, limit int) ([]News, error) {
