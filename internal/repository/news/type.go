@@ -1,6 +1,14 @@
 package news
 
-import "github.com/jmoiron/sqlx"
+import (
+	"github.com/AnisimovMoscow/news-bot/internal/model"
+	"github.com/jmoiron/sqlx"
+)
+
+var tableName = map[model.Source]string{
+	model.SourceSports:     "sports_news",
+	model.SourceChampionat: "championat_news",
+}
 
 type Repository struct {
 	db *sqlx.DB

@@ -3,13 +3,16 @@ package news
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/AnisimovMoscow/news-bot/internal/model"
 )
 
-func (r *Repository) GetByID(id int) (*model.News, error) {
+func (r *Repository) GetByID(id int, source model.Source) (*model.News, error) {
 	var news model.News
-	err := r.db.Get(&news, "SELECT id FROM news WHERE id = ?", id)
+	table := tableName[source]
+	query := fmt.Sprintf("SELECT id FROM %s WHERE id = ?", table)
+	err := r.db.Get(&news, query, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil

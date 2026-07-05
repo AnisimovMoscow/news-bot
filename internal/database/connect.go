@@ -6,7 +6,10 @@ import (
 )
 
 const schema = `
-CREATE TABLE IF NOT EXISTS news (
+CREATE TABLE IF NOT EXISTS sports_news (
+    id INTEGER PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS championat_news (
     id INTEGER PRIMARY KEY
 );
 `

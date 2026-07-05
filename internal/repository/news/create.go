@@ -1,9 +1,15 @@
 package news
 
-import "github.com/AnisimovMoscow/news-bot/internal/model"
+import (
+	"fmt"
 
-func (r *Repository) Create(news model.News) error {
-	_, err := r.db.Exec("INSERT INTO news (id) VALUES (?)", news.ID)
+	"github.com/AnisimovMoscow/news-bot/internal/model"
+)
+
+func (r *Repository) Create(news model.News, source model.Source) error {
+	table := tableName[source]
+	query := fmt.Sprintf("INSERT INTO %s (id) VALUES (?)", table)
+	_, err := r.db.Exec(query, news.ID)
 	if err != nil {
 		return err
 	}

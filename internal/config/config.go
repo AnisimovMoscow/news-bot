@@ -9,15 +9,26 @@ import (
 )
 
 type Config struct {
-	TagID     int
-	NewsLimit NewsLimit
-	Telegram  Telegram
-	DB        string
+	Sports     Sports
+	Championat Championat
+	NewsLimit  NewsLimit
+	Telegram   Telegram
+	DB         string
 }
+
+type Sports struct {
+	TagID int
+}
+
+type Championat struct {
+	Slug string
+}
+
 type NewsLimit struct {
 	All int
 	Top int
 }
+
 type Telegram struct {
 	Token   string
 	Channel int64
@@ -30,7 +41,7 @@ func New() *Config {
 		log.Fatal(err.Error())
 	}
 
-	tagID, err := strconv.Atoi(os.Getenv("TAG_ID"))
+	tagID, err := strconv.Atoi(os.Getenv("SPORTS_TAG_ID"))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -51,7 +62,12 @@ func New() *Config {
 	}
 
 	return &Config{
-		TagID: tagID,
+		Sports: Sports{
+			TagID: tagID,
+		},
+		Championat: Championat{
+			Slug: os.Getenv("CHAMPIONAT_SLUG"),
+		},
 		NewsLimit: NewsLimit{
 			All: allNewsLimit,
 			Top: topNewsLimit,
