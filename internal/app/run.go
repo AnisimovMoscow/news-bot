@@ -76,12 +76,6 @@ func (a *App) sportsNews() {
 	log.Printf("Sports\ntotal: %d, new:%d\n\n", len(news), count)
 }
 
-func print(news []championat.News) {
-	for _, n := range news {
-		log.Println(n.ID, n.CommentsCount)
-	}
-}
-
 func (a *App) championatNews() {
 	// получаем все последние
 	news, err := championat.LastNews(a.config.Championat.Slug)
@@ -89,20 +83,14 @@ func (a *App) championatNews() {
 		log.Println("error", err.Error())
 		return
 	}
-	log.Println("all")
-	print(news)
 
 	// сортируем по комментам
 	slices.SortFunc(news, func(a, b championat.News) int {
 		return b.CommentsCount - a.CommentsCount
 	})
-	log.Println("sort")
-	print(news)
 
 	// обрезаем топ
 	news = news[:a.config.NewsLimit.Top]
-	log.Println("top")
-	print(news)
 
 	// сортируем топ по дате
 	slices.SortFunc(news, func(a, b championat.News) int {
