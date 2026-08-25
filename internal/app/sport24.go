@@ -50,7 +50,7 @@ func (a *App) sport24News() {
 			}
 
 			// сохраняем отправленное
-			err = a.news.Create(model.News{ID: n.ID}, model.SourceSport24)
+			err = a.news.CreateID(model.News{ID: n.ID}, model.SourceSport24)
 			if err != nil {
 				log.Println("error", err.Error())
 				continue

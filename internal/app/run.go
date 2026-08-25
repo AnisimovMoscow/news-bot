@@ -6,13 +6,16 @@ import (
 
 func (a *App) Run() {
 	// спортс
-	a.sportsNews()
+	//a.sportsNews()
 
 	// чемпионат
-	a.championatNews()
+	//a.championatNews()
 
-	// спорт24
-	a.sport24News()
+	// sport24
+	//a.sport24News()
+
+	// bobsoccer
+	a.bobsoccerNews()
 }
 
 func getHTML(title, url string) string {

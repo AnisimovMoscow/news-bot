@@ -12,6 +12,7 @@ type Config struct {
 	Sports     Sports
 	Championat Championat
 	Sport24    Sport24
+	Bobsoccer  Bobsoccer
 	NewsLimit  NewsLimit
 	Telegram   Telegram
 	DB         string
@@ -27,6 +28,10 @@ type Championat struct {
 
 type Sport24 struct {
 	TagID int
+}
+
+type Bobsoccer struct {
+	Slug string
 }
 
 type NewsLimit struct {
@@ -80,6 +85,9 @@ func New() *Config {
 		},
 		Sport24: Sport24{
 			TagID: sport24TagID,
+		},
+		Bobsoccer: Bobsoccer{
+			Slug: os.Getenv("BOBSOCCER_SLUG"),
 		},
 		NewsLimit: NewsLimit{
 			All: allNewsLimit,

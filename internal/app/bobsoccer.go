@@ -3,22 +3,21 @@ package app
 import (
 	"log"
 	"slices"
-	"strconv"
 
 	"github.com/AnisimovMoscow/news-bot/internal/model"
-	"github.com/AnisimovMoscow/news-bot/internal/pkg/sports"
+	"github.com/AnisimovMoscow/news-bot/internal/pkg/bobsoccer"
 )
 
-func (a *App) sportsNews() {
+func (a *App) bobsoccerNews() {
 	// получаем все последние
-	news, err := sports.LastNews(a.config.Sports.TagID, a.config.NewsLimit.All)
+	news, err := bobsoccer.LastNews(a.config.Bobsoccer.Slug, 50)
 	if err != nil {
 		log.Println("error", err.Error())
 		return
 	}
 
 	// сортируем по комментам
-	slices.SortFunc(news, func(a, b sports.News) int {
+	slices.SortFunc(news, func(a, b bobsoccer.News) int {
 		return b.CommentsCount - a.CommentsCount
 	})
 
@@ -26,19 +25,14 @@ func (a *App) sportsNews() {
 	news = news[:a.config.NewsLimit.Top]
 
 	// сортируем топ по дате
-	slices.SortFunc(news, func(a, b sports.News) int {
+	slices.SortFunc(news, func(a, b bobsoccer.News) int {
 		return a.PublishedAt.Compare(b.PublishedAt)
 	})
 
 	// проверяем новые
 	var count int
 	for _, n := range news {
-		id, err := strconv.Atoi(n.ID)
-		if err != nil {
-			log.Println("error", err.Error())
-		}
-
-		old, err := a.news.GetByID(id, model.SourceSports)
+		old, err := a.news.GetByURL(n.RelativeURL, model.SourceBobsoccer)
 		if err != nil {
 			log.Println("error", err.Error())
 			continue
@@ -53,7 +47,7 @@ func (a *App) sportsNews() {
 			}
 
 			// сохраняем отправленное
-			err = a.news.CreateID(model.News{ID: id}, model.SourceSports)
+			err = a.news.CreateURL(model.News{URL: n.RelativeURL}, model.SourceBobsoccer)
 			if err != nil {
 				log.Println("error", err.Error())
 				continue
@@ -63,5 +57,5 @@ func (a *App) sportsNews() {
 		}
 	}
 
-	log.Printf("Sports\ntotal: %d, new:%d\n\n", len(news), count)
+	log.Printf("Bobsoccer\ntotal: %d, new:%d\n\n", len(news), count)
 }

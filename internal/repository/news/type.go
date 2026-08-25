@@ -9,6 +9,7 @@ var tableName = map[model.Source]string{
 	model.SourceSports:     "sports_news",
 	model.SourceChampionat: "championat_news",
 	model.SourceSport24:    "sport24_news",
+	model.SourceBobsoccer:  "bobsoccer_news",
 }
 
 type Repository struct {

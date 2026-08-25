@@ -15,6 +15,9 @@ CREATE TABLE IF NOT EXISTS championat_news (
 CREATE TABLE IF NOT EXISTS sport24_news (
     id INTEGER PRIMARY KEY
 );
+CREATE TABLE IF NOT EXISTS bobsoccer_news (
+    url TEXT PRIMARY KEY
+);
 `
 
 func NewDB(source string) (*sqlx.DB, error) {
