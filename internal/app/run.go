@@ -6,13 +6,13 @@ import (
 
 func (a *App) Run() {
 	// спортс
-	//a.sportsNews()
+	a.sportsNews()
 
 	// чемпионат
-	//a.championatNews()
+	a.championatNews()
 
 	// sport24
-	//a.sport24News()
+	a.sport24News()
 
 	// bobsoccer
 	a.bobsoccerNews()
