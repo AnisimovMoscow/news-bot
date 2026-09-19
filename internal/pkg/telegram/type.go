@@ -21,6 +21,10 @@ type Telegram struct {
 }
 
 func New(cfg config.Telegram) *Telegram {
+	if cfg.Token == "" {
+		return nil
+	}
+
 	client := &http.Client{
 		Timeout: timeout,
 	}
