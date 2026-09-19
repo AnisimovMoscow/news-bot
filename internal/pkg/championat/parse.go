@@ -23,14 +23,15 @@ func parse(url string) (*goquery.Document, error) {
 	client := getClient()
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("http.NewRequest error: %w", err)
 	}
 
 	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Cookie", "unity_pause_sso=1")
 
 	res, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("client.Do error: %w", err)
 	}
 
 	defer res.Body.Close()
@@ -41,7 +42,7 @@ func parse(url string) (*goquery.Document, error) {
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("goquery.NewDocumentFromReader error: %w", err)
 	}
 
 	return doc, nil
@@ -51,7 +52,7 @@ func api(url string, params []Param, resp any) error {
 	client := getClient()
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return err
+		return fmt.Errorf("http.NewRequest error: %w", err)
 	}
 
 	query := req.URL.Query()
@@ -64,14 +65,18 @@ func api(url string, params []Param, resp any) error {
 
 	res, err := client.Do(req)
 	if err != nil {
-		return err
+		return fmt.Errorf("client.Do error: %w", err)
 	}
 
 	defer res.Body.Close()
 
+	if res.StatusCode != http.StatusOK {
+		return fmt.Errorf("status code error: %d %s", res.StatusCode, res.Status)
+	}
+
 	err = json.NewDecoder(res.Body).Decode(&resp)
 	if err != nil {
-		return err
+		return fmt.Errorf("json.NewDecoder.Decode error: %w", err)
 	}
 
 	return nil
